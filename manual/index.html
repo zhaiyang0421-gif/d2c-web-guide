@@ -1,15 +1,848 @@
-<!doctype html>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>D2C 使用指南 · 对外版</title>
-  <meta name="description" content="15 步设计转 Web 代码使用指南。包含流程插图、可运行示例、公开操作视频和可下载 Skill。">
-  <link rel="stylesheet" href="fonts.css">
-  <link rel="stylesheet" href="guide.css">
-  <script src="guide.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <title>D2C 使用指南</title>
+  <link rel="icon" type="image/png" href="assets/original-favicon.png">
+  <link rel="stylesheet" href="original-styles.css">
+  <script src="original-interactions.js" defer></script>
 </head>
 <body>
+  <div id="root"><div>
+<style>
+/* ============================================================
+   RESET
+============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ============================================================
+   TOKENS
+============================================================ */
+:root {
+  --blue:         oklch(55% 0.18 250);
+  --blue-hover:   oklch(52% 0.2  250);
+  --blue-light:   oklch(95% 0.03 250);
+
+  --bg-page:      oklch(96.5% 0.005 250);
+  --bg-surface:   oklch(99.5% 0.003 250);
+  --bg-hover:     oklch(94%  0.006 250);
+  --bg-code:      oklch(14%  0.01  250);
+
+  --stroke:       oklch(82%  0.008 250);
+  --stroke-light: oklch(92%  0.005 250);
+
+  --label-1:      oklch(15%  0.01  250);
+  --label-2:      oklch(35%  0.01  250);
+  --label-3:      oklch(55%  0.01  250);
+  --label-4:      oklch(72%  0.008 250);
+
+  --header-h:     3rem;
+  --sidebar-w:    16.25rem;
+
+  --font:         'IBM Plex Sans', -apple-system, BlinkMacSystemFont,
+                  'PingFang SC', 'Noto Sans SC', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono:    'IBM Plex Mono', 'SF Mono', ui-monospace, Menlo, Consolas, monospace;
+
+  --ease-out:     cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-expo:    cubic-bezier(0.16, 1, 0.3, 1);
+  --t-fast:       150ms;
+  --t-base:       220ms;
+}
+
+/* ============================================================
+   BASE
+============================================================ */
+html { font-size: 16px; scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: var(--font);
+  color: var(--label-1);
+  background: var(--bg-page);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+}
+
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+strong { font-weight: 600; }
+
+/* ============================================================
+   HEADER
+============================================================ */
+.header {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: var(--header-h);
+  background: oklch(99.5% 0.003 250 / 0.9);
+  -webkit-backdrop-filter: saturate(200%) blur(24px);
+  backdrop-filter: saturate(200%) blur(24px);
+  border-bottom: 1px solid var(--stroke-light);
+  display: flex;
+  align-items: center;
+  padding: 0 1.5rem;
+  z-index: 200;
+  gap: 0;
+}
+
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  border-radius: 0.375rem;
+  padding: 0.3125rem 0.5rem;
+  margin: -0.3125rem -0.5rem;
+  transition: background var(--t-fast) var(--ease-out);
+  flex-shrink: 0;
+}
+.header-logo:hover { background: var(--bg-hover); text-decoration: none; }
+
+.logo-svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  flex-shrink: 0;
+  color: var(--label-1);
+}
+
+.logo-text {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.9375rem;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+.logo-text-bold  { font-weight: 700; color: var(--label-1); }
+.logo-text-light { font-weight: 300; color: var(--label-3); margin-left: 0.25em; }
+
+.header-btn {
+  margin-left: auto;
+  padding: 0.3125rem 0.875rem;
+  background: var(--label-1);
+  color: var(--bg-surface);
+  border-radius: 0.3125rem;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background var(--t-fast) var(--ease-out),
+              opacity var(--t-fast) var(--ease-out);
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+.header-btn:hover { background: var(--label-2); opacity: 0.9; text-decoration: none; color: var(--bg-surface); }
+
+/* ============================================================
+   LAYOUT
+============================================================ */
+.layout {
+  display: flex;
+  width: 100%;
+  margin-top: var(--header-h);
+  min-height: calc(100vh - var(--header-h));
+}
+
+/* ============================================================
+   SIDEBAR
+============================================================ */
+.sidebar {
+  position: fixed;
+  top: var(--header-h);
+  left: 0;
+  bottom: 0;
+  width: var(--sidebar-w);
+  overflow-y: auto;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--stroke-light);
+  padding: 1rem 0 4rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--stroke) transparent;
+}
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--stroke); border-radius: 2px; }
+
+.sidebar-group { margin-bottom: 0.5rem; }
+
+.sidebar-group-title {
+  padding: 0.75rem 1.25rem 0.25rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--label-4);
+  user-select: none;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 1.25rem;
+  font-size: 0.8125rem;
+  letter-spacing: -0.1px;
+  color: var(--label-2);
+  line-height: 1.4;
+  transition: background var(--t-fast) var(--ease-out),
+              color var(--t-fast) var(--ease-out);
+  cursor: pointer;
+  border-radius: 0 0.375rem 0.375rem 0;
+  margin-right: 0.5rem;
+  text-decoration: none;
+}
+.sidebar-link:hover { background: var(--bg-hover); color: var(--label-1); text-decoration: none; }
+.sidebar-link.active { color: var(--blue); background: var(--blue-light); font-weight: 500; }
+
+/* ============================================================
+   MAIN
+============================================================ */
+.main {
+  flex: 1;
+  margin-left: var(--sidebar-w);
+  min-height: calc(100vh - var(--header-h));
+  background: var(--bg-surface);
+  padding: 4rem 2rem 6rem 4rem;
+}
+
+.content {
+  width: 100%;
+  max-width: 52rem;
+}
+
+/* ============================================================
+   HERO
+============================================================ */
+.page-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--label-3);
+  margin-bottom: 1rem;
+}
+.page-eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 1.25rem;
+  height: 1px;
+  background: var(--label-4);
+  vertical-align: middle;
+  margin-right: 0.125rem;
+}
+
+.page-title {
+  font-family: 'IBM Plex Sans', 'PingFang SC', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  color: var(--label-1);
+  margin-bottom: 1.5rem;
+}
+
+.page-subtitle {
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: var(--label-4);
+  letter-spacing: 0.005em;
+  line-height: 1.65;
+  max-width: 32rem;
+  margin-bottom: 0;
+}
+
+.hero-rule {
+  border: none;
+  border-top: 1px solid var(--stroke-light);
+  margin: 2.5rem 0 0;
+}
+
+/* ============================================================
+   PIPELINE
+============================================================ */
+.pipeline {
+  margin: 2.5rem 0 1.5rem;
+}
+
+.pipeline-steps {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  padding: 0;
+  margin: 0;
+}
+
+.pl-step {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 0.5rem;
+  padding: 1.125rem 1.125rem 1.25rem;
+  position: relative;
+  cursor: default;
+  border: 1px solid var(--stroke-light);
+  border-radius: 0.625rem;
+  background: var(--bg-surface);
+  overflow: hidden;
+  transition: border-color var(--t-base) var(--ease-expo),
+              background   var(--t-base) var(--ease-expo);
+}
+
+.pl-step::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--label-1);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s var(--ease-expo);
+}
+
+.pl-step:hover::before { transform: scaleX(1); }
+.pl-step:hover {
+  border-color: var(--stroke);
+  background: var(--bg-hover);
+}
+
+.pl-step-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--label-4);
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.pl-step-name {
+  font-family: 'IBM Plex Sans', 'PingFang SC', sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--label-1);
+  line-height: 1.3;
+}
+
+.pl-step-desc {
+  font-size: 0.6875rem;
+  color: var(--label-4);
+  line-height: 1.55;
+  letter-spacing: 0.005em;
+}
+
+/* Stats strip */
+.pl-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 1.25rem;
+  gap: 0;
+}
+
+.pl-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  padding: 1rem 0;
+}
+.pl-stat + .pl-stat { padding-left: 2rem; }
+
+.pl-stat-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.5625rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--label-4);
+  font-weight: 400;
+}
+
+.pl-stat-value {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: var(--label-1);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+/* ============================================================
+   SECTION TITLE
+============================================================ */
+.section-title {
+  font-family: 'IBM Plex Sans', 'PingFang SC', sans-serif;
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--label-1);
+  margin: 4rem 0 1.25rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--stroke-light);
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  line-height: 1.3;
+}
+
+.section-chip {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.625rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--label-4);
+  background: var(--bg-page);
+  border: 1px solid var(--stroke-light);
+  padding: 0.1875rem 0.5rem;
+  border-radius: 3px;
+}
+
+/* ============================================================
+   STEP LIST
+============================================================ */
+.step-list {
+  list-style: none;
+  position: relative;
+  padding: 0;
+  margin: 0;
+}
+
+.step {
+  display: flex;
+  gap: 1.25rem;
+  padding: 1rem 0 1.5rem;
+  position: relative;
+}
+.step:last-child { padding-bottom: 0; }
+
+/* vertical connector line */
+.step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 0.8125rem;
+  top: calc(1rem + 1.625rem + 2px);
+  bottom: 0;
+  width: 1px;
+  background: oklch(88% 0.006 250);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.step-circle {
+  width: 1.625rem;
+  height: 1.625rem;
+  border-radius: 50%;
+  background: var(--bg-surface);
+  border: 1.5px solid var(--stroke);
+  color: var(--label-2);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  font-family: 'IBM Plex Mono', monospace;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+  position: relative;
+  z-index: 1;
+  transition: background var(--t-base) var(--ease-out),
+              border-color var(--t-base) var(--ease-out),
+              color var(--t-base) var(--ease-out),
+              transform var(--t-fast) var(--ease-out);
+}
+.step:hover .step-circle {
+  background: var(--label-1);
+  border-color: var(--label-1);
+  color: var(--bg-surface);
+  transform: scale(1.06);
+}
+
+.step-body {
+  flex: 1;
+  min-width: 0;
+  border-bottom: 1px solid var(--stroke-light);
+  padding-bottom: 1.5rem;
+}
+.step:last-child .step-body { border-bottom: none; padding-bottom: 0; }
+
+.step-header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.step-title {
+  font-family: 'IBM Plex Sans', 'PingFang SC', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--label-1);
+  line-height: 1.35;
+}
+
+/* Tags */
+.tag {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.125rem 0.5rem;
+  border-radius: 980px;
+}
+.tag-required { background: oklch(97% 0.02 250);    color: oklch(42% 0.1 250); }
+.tag-optional { background: var(--bg-page);          color: var(--label-3); border: 1px solid var(--stroke); }
+.tag-done     { background: oklch(96.5% 0.03 155);  color: oklch(48% 0.1 155); }
+
+/* ============================================================
+   PROSE
+============================================================ */
+.prose p {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--label-2);
+  margin-bottom: 1rem;
+  letter-spacing: -0.1px;
+  max-width: 65ch;
+}
+.prose p:last-child { margin-bottom: 0; }
+
+.prose ul, .prose ol {
+  padding-left: 1.25rem;
+  margin-bottom: 1rem;
+}
+.prose li {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--label-2);
+  margin-bottom: 0.25rem;
+  letter-spacing: -0.1px;
+}
+.prose code {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.82em;
+  background: var(--bg-page);
+  color: var(--label-1);
+  padding: 0.125rem 0.4rem;
+  border-radius: 3px;
+  border: 1px solid var(--stroke-light);
+}
+
+/* ============================================================
+   CODE BLOCK
+============================================================ */
+.code-wrap {
+  background: var(--bg-code);
+  border-radius: 0.625rem;
+  overflow: hidden;
+  margin: 1rem 0;
+  box-shadow: inset 0 0 0 1px oklch(100% 0 0 / 0.06);
+}
+
+.code-topbar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 0.875rem 0;
+}
+
+.dot { width: 0.6875rem; height: 0.6875rem; border-radius: 50%; }
+.dot-r { background: oklch(68% 0.2 25); }
+.dot-y { background: oklch(78% 0.17 85); }
+.dot-g { background: oklch(72% 0.2 145); }
+
+.code-copy-btn {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: oklch(55% 0.02 250);
+  background: transparent;
+  border: 1px solid oklch(100% 0 0 / 0.1);
+  border-radius: 3px;
+  padding: 0.1875rem 0.5rem;
+  cursor: pointer;
+  transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
+}
+.code-copy-btn:hover {
+  background: oklch(100% 0 0 / 0.08);
+  color: oklch(96% 0.005 250);
+  border-color: oklch(100% 0 0 / 0.2);
+}
+.code-copy-btn.copied {
+  color: oklch(78% 0.14 155);
+  border-color: oklch(78% 0.14 155 / 0.3);
+}
+
+.code-wrap pre {
+  padding: 0.625rem 1rem 0.875rem;
+  overflow-x: auto;
+  margin: 0;
+  scrollbar-width: thin;
+  scrollbar-color: oklch(100% 0 0 / 0.15) transparent;
+}
+.code-wrap pre::-webkit-scrollbar { height: 3px; }
+.code-wrap pre::-webkit-scrollbar-thumb { background: oklch(100% 0 0 / 0.15); border-radius: 2px; }
+
+.code-wrap code {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.8125rem;
+  line-height: 1.75;
+  color: oklch(96% 0.005 250);
+  background: transparent;
+  border: none;
+  padding: 0;
+  border-radius: 0;
+  white-space: pre;
+  font-variant-ligatures: none;
+}
+
+/* ============================================================
+   CALLOUT
+============================================================ */
+.callout {
+  display: flex;
+  gap: 0.625rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+  font-size: 0.8125rem;
+  line-height: 1.65;
+  letter-spacing: -0.1px;
+  border: 1px solid;
+}
+.callout-emoji {
+  font-size: 0.9rem;
+  flex-shrink: 0;
+  line-height: 1.65;
+  user-select: none;
+}
+.callout-info {
+  background: oklch(98.5% 0.008 250);
+  border-color: oklch(90% 0.02 250);
+}
+.callout-info .callout-text { color: oklch(40% 0.08 250); }
+.callout-warning {
+  background: oklch(98.5% 0.012 85);
+  border-color: oklch(90% 0.025 85);
+}
+.callout-warning .callout-text { color: oklch(42% 0.07 65); }
+.callout-tip {
+  background: #f0faf4;
+  border-color: #b7e4c7;
+}
+.callout-tip .callout-text { color: #276749; }
+.callout-tip .callout-text a { color: #1a5c3a; text-decoration: underline; font-weight: 500; }
+.callout-tip .callout-text a:hover { color: #0f3d26; }
+.callout strong { font-weight: 600; }
+
+/* ============================================================
+   STEP IMAGE
+============================================================ */
+.step-img {
+  width: 72%;
+  max-width: 560px;
+  border-radius: 0.625rem;
+  border: 1px solid var(--stroke-light);
+  display: block;
+  margin: 1rem 0;
+  background: var(--bg-page);
+  cursor: zoom-in;
+  transition: opacity var(--t-fast) var(--ease-out),
+              transform var(--t-fast) var(--ease-out),
+              box-shadow var(--t-fast) var(--ease-out);
+}
+.step-img:hover {
+  opacity: 0.92;
+  transform: scale(1.01);
+  box-shadow: 0 4px 24px oklch(0% 0 0 / 0.10);
+}
+
+/* ============================================================
+   LIGHTBOX
+============================================================ */
+.lb-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: oklch(0% 0 0 / 0.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-out;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  backdrop-filter: blur(4px);
+}
+.lb-overlay.lb-show { opacity: 1; }
+.lb-overlay img {
+  max-width: 90vw;
+  max-height: 88vh;
+  border-radius: 0.5rem;
+  box-shadow: 0 8px 48px oklch(0% 0 0 / 0.5);
+  transform: scale(0.94);
+  transition: transform 0.22s var(--ease-expo);
+  cursor: default;
+  user-select: none;
+}
+.lb-overlay.lb-show img { transform: scale(1); }
+.lb-close {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: oklch(100% 0 0 / 0.12);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  transition: background 0.15s;
+}
+.lb-close:hover { background: oklch(100% 0 0 / 0.22); }
+
+/* ============================================================
+   TABLE
+============================================================ */
+.table-wrap {
+  overflow-x: auto;
+  margin: 1rem 0;
+  border-radius: 0.625rem;
+  border: 1px solid var(--stroke-light);
+}
+.table-wrap table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+}
+.table-wrap th {
+  padding: 0.75rem 1rem;
+  background: var(--bg-page);
+  color: var(--label-3);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--stroke-light);
+  text-align: left;
+  white-space: nowrap;
+}
+.table-wrap td {
+  padding: 0.6875rem 1rem;
+  color: var(--label-2);
+  border-bottom: 1px solid var(--stroke-light);
+  vertical-align: middle;
+  line-height: 1.5;
+}
+.table-wrap tr:last-child td { border-bottom: none; }
+.table-wrap tbody tr:hover td {
+  background: var(--bg-hover);
+  transition: background var(--t-fast);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.0625rem 0.5rem;
+  border-radius: 980px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+.badge-purple { background: oklch(92% 0.06 300); color: oklch(38% 0.15 300); }
+.badge-blue   { background: oklch(97% 0.02 250); color: oklch(55% 0.18 250); }
+.badge-green  { background: oklch(96.5% 0.03 155); color: oklch(48% 0.1 155); }
+
+/* ============================================================
+   DOC NAV
+============================================================ */
+.doc-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--stroke-light);
+}
+.doc-nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--label-2);
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  border: 1px solid var(--stroke-light);
+  background: var(--bg-surface);
+  transition: background var(--t-fast) var(--ease-out),
+              color var(--t-fast) var(--ease-out),
+              border-color var(--t-fast) var(--ease-out),
+              transform 100ms var(--ease-out);
+  text-decoration: none;
+  cursor: pointer;
+}
+.doc-nav-link:hover {
+  background: var(--bg-hover);
+  color: var(--label-1);
+  border-color: var(--stroke);
+  text-decoration: none;
+}
+.doc-nav-link:active { transform: scale(0.97); }
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+@media (max-width: 900px) {
+  .sidebar { display: none; }
+  .main { margin-left: 0; padding: 2rem 1rem 5rem; }
+  .content { max-width: 100%; }
+}
+@media (max-width: 680px) {
+  .pipeline-steps {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+  .pl-stats { grid-template-columns: 1fr; }
+  .pl-stat + .pl-stat { padding-left: 0; padding-top: 0.75rem; border-top: 1px solid var(--stroke-light); }
+}
+@media (max-width: 480px) {
+  .header-nav { display: none; }
+}
+</style>
+
+<!-- FONTS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-sans@5/300.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-sans@5/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-sans@5/500.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-sans@5/600.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-sans@5/700.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-mono@5/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-mono@5/500.css">
+
+<!-- ================================================================
+     HEADER
+================================================================ -->
 <header class="header" role="banner">
   <a class="header-logo" href="#" aria-label="D2C Guide 首页">
     <svg class="logo-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -20,15 +853,17 @@
       <span class="logo-text-bold">D2C</span><span class="logo-text-light">Guide</span>
     </span>
   </a>
-  <a class="header-btn" href="#step-2">
+  <a class="header-btn" href="https://km.sankuai.com/collabpage/2760641942" target="_blank" rel="noopener">
     查看文档
   </a>
 </header>
 
-
+<!-- ================================================================
+     LAYOUT
+================================================================ -->
 <div class="layout">
 
-  
+  <!-- Sidebar -->
   <aside class="sidebar" aria-label="页面导航">
 
     <div class="sidebar-group">
@@ -38,9 +873,9 @@
 
     <div class="sidebar-group">
       <div class="sidebar-group-title" role="heading" aria-level="3">一、准备工作</div>
-      <a href="#step-1"  class="sidebar-link">准备开发工具</a>
+      <a href="#step-1"  class="sidebar-link">安装 CatPaw</a>
       <a href="#step-2"  class="sidebar-link">安装 D2C Skill</a>
-      <a href="#step-3"  class="sidebar-link">准备设计工具</a>
+      <a href="#step-3"  class="sidebar-link">安装 MasterGo 插件</a>
       <a href="#step-4"  class="sidebar-link">生成 SSH Key</a>
       <a href="#step-5"  class="sidebar-link">克隆代码仓库</a>
       <a href="#step-6"  class="sidebar-link">安装项目依赖</a>
@@ -49,15 +884,15 @@
     <div class="sidebar-group">
       <div class="sidebar-group-title" role="heading" aria-level="3">二、设计稿准备</div>
       <a href="#step-7"  class="sidebar-link">自动布局</a>
-      <a href="#step-8"  class="sidebar-link">图层规范检查</a>
-      <a href="#step-9"  class="sidebar-link">图层语义命名</a>
+      <a href="#step-8"  class="sidebar-link">冗余图层检测</a>
+      <a href="#step-9"  class="sidebar-link">自动命名</a>
       <a href="#step-10" class="sidebar-link">Token 创建绑定</a>
-      <a href="#step-11" class="sidebar-link">导出图片资产</a>
+      <a href="#step-11" class="sidebar-link">图片替换 PNG</a>
     </div>
 
     <div class="sidebar-group">
       <div class="sidebar-group-title" role="heading" aria-level="3">三、Skill 应用</div>
-      <a href="#step-12" class="sidebar-link">提交画板链接 + 截图</a>
+      <a href="#step-12" class="sidebar-link">粘贴容器 + 贴图</a>
       <a href="#step-13" class="sidebar-link">选择生成范围</a>
       <a href="#step-14" class="sidebar-link">Skill 转码生成</a>
       <a href="#step-15" class="sidebar-link">交付代码</a>
@@ -66,7 +901,7 @@
 
   </aside>
 
-  
+  <!-- Main content -->
   <main class="main" id="main-content" tabindex="-1">
     <div class="content">
 
@@ -74,7 +909,7 @@
       <section id="intro" aria-labelledby="page-title">
         <p class="page-eyebrow" aria-hidden="true">Design to Code</p>
         <h1 class="page-title" id="page-title">使用指南</h1>
-        <p class="page-subtitle">面向设计师与开发同学的设计转 Web 代码流程，从环境准备到代码交付，共 15 个步骤。</p>
+        <p class="page-subtitle">面向点评设计师与开发同学的完整操作流程，从环境准备到代码交付，共 15 个步骤。</p>
 
         <hr class="hero-rule" aria-hidden="true">
 
@@ -85,26 +920,26 @@
 
             <li class="pl-step">
               <span class="pl-step-num">01</span>
-              <span class="pl-step-name">结构化设计稿</span>
+              <span class="pl-step-name">MasterGo 设计稿</span>
               <span class="pl-step-desc">AI 友好图层规范，自动布局 + 语义命名</span>
             </li>
 
             <li class="pl-step">
               <span class="pl-step-num">02</span>
-              <span class="pl-step-name">结构解析 &amp; 素材</span>
-              <span class="pl-step-desc">用截图和画板定位布局，整理可复用资产</span>
+              <span class="pl-step-name">DSL 解析 &amp; 切图</span>
+              <span class="pl-step-desc">D2C Skill 提取结构，自动切图并上传</span>
             </li>
 
             <li class="pl-step">
               <span class="pl-step-num">03</span>
               <span class="pl-step-name">视觉验证</span>
-              <span class="pl-step-desc">用相同视口和状态对比设计与实现</span>
+              <span class="pl-step-desc">AI 对比截图还原度，≥ 85 分方可继续</span>
             </li>
 
             <li class="pl-step">
               <span class="pl-step-num">04</span>
-              <span class="pl-step-name">Web 代码输出</span>
-              <span class="pl-step-desc">通过构建与交互验证，提交代码与记录</span>
+              <span class="pl-step-name">Picasso TSX 输出</span>
+              <span class="pl-step-desc">Build 校验通过，可直接对接接口数据</span>
             </li>
 
           </ol>
@@ -112,16 +947,16 @@
           <!-- Stats strip -->
           <dl class="pl-stats" aria-label="关键指标">
             <div class="pl-stat">
-              <dt class="pl-stat-label">操作步骤</dt>
-              <dd class="pl-stat-value">15</dd>
+              <dt class="pl-stat-label">视觉还原度</dt>
+              <dd class="pl-stat-value">80%+</dd>
             </div>
             <div class="pl-stat">
-              <dt class="pl-stat-label">工作阶段</dt>
-              <dd class="pl-stat-value">3</dd>
+              <dt class="pl-stat-label">效率提升</dt>
+              <dd class="pl-stat-value">70%+</dd>
             </div>
             <div class="pl-stat">
-              <dt class="pl-stat-label">交付平台</dt>
-              <dd class="pl-stat-value">Web</dd>
+              <dt class="pl-stat-label">Pipeline</dt>
+              <dd class="pl-stat-value">全自动</dd>
             </div>
           </dl>
 
@@ -136,111 +971,161 @@
 
       <ul class="step-list" aria-label="准备工作步骤">
 
-        
+        <!-- Step 1 -->
         <li class="step" id="step-1">
           <div class="step-circle" aria-hidden="true">1</div>
           <div class="step-body">
             <div class="step-header">
-              <span class="step-title">准备开发工具</span>
+              <span class="step-title">安装 CatPaw</span>
               <span class="tag tag-required" aria-label="必需步骤">必需</span>
             </div>
-            <div class="prose"><p>用浏览器打开本指南。准备一个可以编辑文件的 Web 项目和你常用的编辑器。使用 AI 辅助时，在目标项目中打开 Codex 或其他支持项目文件的编程助手。</p><p><a href="practice.html">打开可运行的活动卡片示例 →</a></p></div>
+            <div class="prose">
+              <p>下载并安装 CatPaw 客户端，使用美团 SSO 账号登录。CatPaw 是 D2C 工作流的核心载体，所有 Skill 的执行都在 CatPaw 中完成。</p>
+              <p>下载链接：<a href="https://catpaw.sankuai.com/" target="_blank" rel="noopener">https://catpaw.sankuai.com/</a></p>
+            </div>
           </div>
         </li>
 
-        
+        <!-- Step 2 -->
         <li class="step" id="step-2">
           <div class="step-circle" aria-hidden="true">2</div>
           <div class="step-body">
             <div class="step-header">
-              <span class="step-title">安装 D2C Skill</span>
-              <span class="tag tag-optional">可选</span>
+              <span class="step-title">安装 materialx-d2c Skill</span>
+              <span class="tag tag-required">必需</span>
             </div>
-            <div class="prose"><p>下载通用工具包，把其中的 <code>.agents/skills/d2c-web-workflow/</code> 放到当前项目的 <code>.agents/skills/</code> 下。在项目里打开 Codex，输入 <code>$d2c-web-workflow</code> 并附上参考截图。</p><p><a href="d2c-web-kit.zip" download>下载 d2c-web-kit.zip →</a></p></div><div class="callout callout-info" role="note"><span class="callout-text">也可以把 <a href="https://github.com/zhaiyang0421-gif/d2c-web-guide" target="_blank" rel="noopener">GitHub 仓库地址</a>交给编程助手，请它下载 ZIP 并把 Skill 安装到当前项目。</span></div>
+            <div class="prose">
+              <p>在 CatPaw 中安装 D2C 核心 Skill，可通过 <a href="https://friday.sankuai.com/skills/skill-detail?activeTab=overview&amp;id=37646" target="_blank" rel="noopener">Skill 市场页面</a>直接安装，或通过终端命令安装：</p>
+            </div>
+            <div class="code-wrap">
+              <div class="code-topbar">
+                <div class="dot dot-r" aria-hidden="true"></div>
+                <div class="dot dot-y" aria-hidden="true"></div>
+                <div class="dot dot-g" aria-hidden="true"></div>
+                <button class="code-copy-btn" aria-label="复制代码" data-code="mtskills i materialx-d2c-skill --target-dir ~/.catpaw/skills">
+                  <svg width="11" height="11" viewBox="0 0 14 14" fill="none" aria-hidden="true"><rect x="4" y="4" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M2 9V2.5A.5.5 0 0 1 2.5 2H9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                  复制
+                </button>
+              </div>
+              <pre><code>mtskills i materialx-d2c-skill --target-dir ~/.catpaw/skills</code></pre>
+            </div>
+            <div class="callout callout-tip" role="note" style="margin-top:1rem;">
+              <span class="callout-emoji" aria-hidden="true">📦</span>
+              <span class="callout-text">如果你在 Picasso 项目中使用，可以下载 Skill 真机调试，解压后放入 <code>~/.catpaw/skills/</code> 目录即可生效。<a href="https://km.sankuai.com/api/file/attachment/2761259131/236275798339" target="_blank" rel="noopener" style="margin-left:0.25em;font-weight:500;">下载 picasso-liveload-verify.zip →</a></span>
+            </div>
           </div>
         </li>
 
-        
+        <!-- Step 3 -->
         <li class="step" id="step-3">
           <div class="step-circle" aria-hidden="true">3</div>
           <div class="step-body">
             <div class="step-header">
-              <span class="step-title">准备设计工具</span>
-              <span class="tag tag-optional">可选</span>
+              <span class="step-title">安装 MasterGo 插件</span>
+              <span class="tag tag-optional">推荐</span>
             </div>
-            <div class="prose"><p>使用你能打开的设计画板，选中要实现的容器并导出截图。示例使用活动卡片，标注了容器、标题、摘要和按钮。手上只有截图时，在任务单里补充尺寸和状态。</p></div><img class="step-img" src="step-03.webp" width="1060" height="640" alt="演示画板与截图导出面板" tabindex="0" role="button" aria-haspopup="dialog" loading="lazy">
+            <div class="prose">
+              <p>在 MasterGo 插件市场点击【AI友好化】安装该插件。它可以辅助你完成设计稿的规范化工作，包括自动命名、自动布局检测等。</p>
+            </div>
+            <img class="step-img" src="assets/step3-mastergo-plugin.png" alt="MasterGo 插件市场截图" loading="lazy">
           </div>
         </li>
 
-        
+        <!-- Step 4 -->
         <li class="step" id="step-4">
           <div class="step-circle" aria-hidden="true">4</div>
           <div class="step-body">
             <div class="step-header">
-              <span class="step-title">配置 Git SSH 公钥</span>
-              <span class="tag tag-optional">可选</span>
+              <span class="step-title">生成 SSH Key</span>
+              <span class="tag tag-required">必需</span>
             </div>
-            <div class="prose"><p>使用 SSH 克隆仓库时，先检查本机已有密钥。需要新建时，为示例命令指定一个未占用的文件名。把 <code>.pub</code> 文件的内容添加到代码托管平台，再使用平台提供的 SSH 地址。</p></div><div class="code-wrap">
-  <div class="code-topbar">
-    <span class="dot dot-r" aria-hidden="true"></span>
-    <span class="dot dot-y" aria-hidden="true"></span>
-    <span class="dot dot-g" aria-hidden="true"></span>
-    <button class="code-copy-btn" type="button" aria-label="复制代码">
-      <svg width="11" height="11" viewBox="0 0 14 14" fill="none" aria-hidden="true"><rect x="4" y="4" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M2 9V2.5A.5.5 0 0 1 2.5 2H9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-      <span>复制</span>
-    </button>
-  </div>
-  <pre><code>ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_d2c -C &quot;you@example.com&quot;
-cat ~/.ssh/id_ed25519_d2c.pub</code></pre>
-</div><img class="step-img" src="step-04.webp" width="1060" height="680" alt="SSH 公钥设置示意图" tabindex="0" role="button" aria-haspopup="dialog" loading="lazy">
+            <div class="prose">
+              <p>用于从内部 Git 仓库拉取代码。在终端执行以下命令生成密钥，并将其添加到 Code 平台：</p>
+            </div>
+            <div class="code-wrap">
+              <div class="code-topbar">
+                <div class="dot dot-r" aria-hidden="true"></div>
+                <div class="dot dot-y" aria-hidden="true"></div>
+                <div class="dot dot-g" aria-hidden="true"></div>
+                <button class="code-copy-btn" aria-label="复制代码" data-code='ssh-keygen -t ed25519 -C "your_mis@meituan.com"
+
+cat ~/.ssh/id_ed25519.pub'>
+                  <svg width="11" height="11" viewBox="0 0 14 14" fill="none" aria-hidden="true"><rect x="4" y="4" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M2 9V2.5A.5.5 0 0 1 2.5 2H9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                  复制
+                </button>
+              </div>
+              <pre><code>ssh-keygen -t ed25519 -C "your_mis@meituan.com"
+
+cat ~/.ssh/id_ed25519.pub</code></pre>
+            </div>
+            <div class="prose">
+              <p>得到密钥后，打开 <a href="https://dev.sankuai.com/code/home" target="_blank" rel="noopener">dev.sankuai.com</a>，点击右上角 SSH KEY 添加公钥后保存。</p>
+            </div>
+            <img class="step-img" src="assets/step4-ssh-key.png" alt="Code 平台添加 SSH Key 截图" loading="lazy">
           </div>
         </li>
 
-        
+        <!-- Step 5 -->
         <li class="step" id="step-5">
           <div class="step-circle" aria-hidden="true">5</div>
           <div class="step-body">
             <div class="step-header">
               <span class="step-title">克隆代码仓库</span>
-              <span class="tag tag-required" aria-label="必需步骤">必需</span>
+              <span class="tag tag-required">必需</span>
             </div>
-            <div class="prose"><p>已有工作区时，打开目标项目并检查当前分支。需要练习仓库时，可以克隆下面的公开示例。</p></div><div class="code-wrap">
-  <div class="code-topbar">
-    <span class="dot dot-r" aria-hidden="true"></span>
-    <span class="dot dot-y" aria-hidden="true"></span>
-    <span class="dot dot-g" aria-hidden="true"></span>
-    <button class="code-copy-btn" type="button" aria-label="复制代码">
-      <svg width="11" height="11" viewBox="0 0 14 14" fill="none" aria-hidden="true"><rect x="4" y="4" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M2 9V2.5A.5.5 0 0 1 2.5 2H9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-      <span>复制</span>
-    </button>
-  </div>
-  <pre><code>git clone https://github.com/zhaiyang0421-gif/d2c-web-guide.git
-cd d2c-web-guide
-git switch -c feat/activity-card</code></pre>
-</div><img class="step-img" src="step-05a.webp" width="1060" height="465" alt="复制公开仓库 HTTPS 地址的演示" tabindex="0" role="button" aria-haspopup="dialog" loading="lazy"><div class="prose"><p>把地址交给编辑器或终端，拉取到本地后打开项目目录。</p></div><img class="step-img" src="step-05b.webp" width="1060" height="635" alt="在本地编辑器中打开示例项目" tabindex="0" role="button" aria-haspopup="dialog" loading="lazy"><div class="prose"><p>为本次修改建立工作分支。</p></div><img class="step-img" src="step-05c.webp" width="1060" height="635" alt="建立活动卡片工作分支的演示" tabindex="0" role="button" aria-haspopup="dialog" loading="lazy">
+            <div class="prose">
+              <p>通过 <code>git clone</code> 将目标 Picasso 项目拉取到本地：</p>
+            </div>
+            <div class="code-wrap">
+              <div class="code-topbar">
+                <div class="dot dot-r" aria-hidden="true"></div>
+                <div class="dot dot-y" aria-hidden="true"></div>
+                <div class="dot dot-g" aria-hidden="true"></div>
+                <button class="code-copy-btn" aria-label="复制代码" data-code="git clone git@code.sankuai.com:your-group/your-project.git
+cd your-project">
+                  <svg width="11" height="11" viewBox="0 0 14 14" fill="none" aria-hidden="true"><rect x="4" y="4" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M2 9V2.5A.5.5 0 0 1 2.5 2H9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                  复制
+                </button>
+              </div>
+              <pre><code>git clone git@code.sankuai.com:your-group/your-project.git
+cd your-project</code></pre>
+            </div>
+            <div class="prose"><p>点击 Clone，复制仓库地址：</p></div>
+            <img class="step-img" src="assets/step5-clone-repo.png" alt="Code 平台 Clone 仓库截图" loading="lazy">
+            <div class="prose"><p>打开 CatPaw，点击 Clone 输入刚复制的仓库地址：</p></div>
+            <img class="step-img" src="assets/step5-catpaw-clone.png" alt="CatPaw Clone 仓库截图" loading="lazy">
+            <div class="prose"><p>克隆完成后点击右下角 master，创建新的个人分支：</p></div>
+            <img class="step-img" src="assets/step5-create-branch.png" alt="创建个人分支截图" loading="lazy">
           </div>
         </li>
 
-        
+        <!-- Step 6 -->
         <li class="step" id="step-6">
           <div class="step-circle" aria-hidden="true">6</div>
           <div class="step-body">
             <div class="step-header">
               <span class="step-title">安装项目依赖</span>
-              <span class="tag tag-optional">可选</span>
+              <span class="tag tag-required">必需</span>
             </div>
-            <div class="prose"><p>按目标项目的 README、锁文件和版本配置安装依赖，再运行一次基线预览。使用 pnpm 的项目可以从下面的命令开始。</p></div><div class="code-wrap">
-  <div class="code-topbar">
-    <span class="dot dot-r" aria-hidden="true"></span>
-    <span class="dot dot-y" aria-hidden="true"></span>
-    <span class="dot dot-g" aria-hidden="true"></span>
-    <button class="code-copy-btn" type="button" aria-label="复制代码">
-      <svg width="11" height="11" viewBox="0 0 14 14" fill="none" aria-hidden="true"><rect x="4" y="4" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M2 9V2.5A.5.5 0 0 1 2.5 2H9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-      <span>复制</span>
-    </button>
-  </div>
-  <pre><code>pnpm install</code></pre>
-</div><div class="callout callout-warning" role="note"><span class="callout-emoji" aria-hidden="true">💡</span><span class="callout-text">本页的 <a href="practice.html">活动卡片示例</a> 使用原生 HTML、CSS 和 JavaScript，可以直接在浏览器中打开。</span></div>
+            <div class="prose">
+              <p>进入项目目录，安装项目所需的 Node.js 依赖包：</p>
+            </div>
+            <div class="code-wrap">
+              <div class="code-topbar">
+                <div class="dot dot-r" aria-hidden="true"></div>
+                <div class="dot dot-y" aria-hidden="true"></div>
+                <div class="dot dot-g" aria-hidden="true"></div>
+                <button class="code-copy-btn" aria-label="复制代码" data-code="pnpm install">
+                  <svg width="11" height="11" viewBox="0 0 14 14" fill="none" aria-hidden="true"><rect x="4" y="4" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M2 9V2.5A.5.5 0 0 1 2.5 2H9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                  复制
+                </button>
+              </div>
+              <pre><code>pnpm install</code></pre>
+            </div>
+            <div class="callout callout-warning" role="note">
+              <span class="callout-emoji" aria-hidden="true">⚠️</span>
+              <span class="callout-text">具体 Node.js 版本号请询问业务研发，推荐使用 nvm 管理 Node.js 版本。（通常 Node.js 版本 ≥ 14）</span>
+            </div>
           </div>
         </li>
 
@@ -249,12 +1134,12 @@ git switch -c feat/activity-card</code></pre>
       <!-- ══ PHASE 2 ══ -->
       <h2 class="section-title" id="phase-2">
         阶段二：设计稿准备
-        <span class="section-chip">设计工具</span>
+        <span class="section-chip">MasterGo</span>
       </h2>
 
       <ul class="step-list" aria-label="设计稿准备步骤">
 
-        
+        <!-- Step 7 -->
         <li class="step" id="step-7">
           <div class="step-circle" aria-hidden="true">7</div>
           <div class="step-body">
@@ -263,7 +1148,7 @@ git switch -c feat/activity-card</code></pre>
               <span class="tag tag-required">必需</span>
             </div>
             <div class="prose">
-              <p>先组织容器再填充内容，用自动布局表达行列、间距和对齐。</p>
+              <p>将设计稿的容器改为自动布局，遵循「先组织容器、后填充内容」的原则：</p>
               <ul>
                 <li>容器使用自动布局，明确绝对定位图层（如悬浮按钮）</li>
                 <li>确保间距、对齐关系为<strong>整数</strong>，避免小数</li>
@@ -273,31 +1158,37 @@ git switch -c feat/activity-card</code></pre>
           </div>
         </li>
 
-        
+        <!-- Step 8 -->
         <li class="step" id="step-8">
           <div class="step-circle" aria-hidden="true">8</div>
           <div class="step-body">
             <div class="step-header">
-              <span class="step-title">图层规范检查</span>
-              <span class="tag tag-required" aria-label="必需步骤">必需</span>
+              <span class="step-title">冗余图层检测</span>
+              <span class="tag tag-required">必需</span>
             </div>
-            <div class="prose"><p>核对隐藏元素、重复容器、缺失的自动布局和非预期的小数坐标。把实际参与裁切、遮罩或状态切换的图层标注清楚。</p></div><img class="step-img" src="step-08.webp" width="1060" height="680" alt="活动卡片的布局和冗余图层检查示意" tabindex="0" role="button" aria-haspopup="dialog" loading="lazy">
+            <div class="prose">
+              <p>打开 MasterGo 插件【AI友好化】，切换到「规范检查」标签，开启隐藏元素检测、自动布局检测、小数点检测等检查项，点击「开始检查」，根据检查结果逐项修复，确保设计稿符合规范。</p>
+            </div>
+            <img class="step-img" src="assets/step9-layer-check.png" alt="冗余图层检测截图" loading="lazy">
           </div>
         </li>
 
-        
+        <!-- Step 9 -->
         <li class="step" id="step-9">
           <div class="step-circle" aria-hidden="true">9</div>
           <div class="step-body">
             <div class="step-header">
-              <span class="step-title">图层语义命名</span>
-              <span class="tag tag-required" aria-label="必需步骤">必需</span>
+              <span class="step-title">自动命名</span>
+              <span class="tag tag-required">必需</span>
             </div>
-            <div class="prose"><p>按职责给容器、内容、资产和控件命名，例如 <code>ActivityCard</code>、<code>Title</code>、<code>JoinButton</code>。多个状态可以用变体字段区分。</p></div><img class="step-img" src="step-09.webp" width="1060" height="548" alt="活动卡片图层语义命名示意" tabindex="0" role="button" aria-haspopup="dialog" loading="lazy">
+            <div class="prose">
+              <p>切换到「图层命名」标签，选中目标图层后点击「应用命名」，插件会自动生成语义化的组件名称（如 <code>Container/Card-Full</code>），确保 AI 能正确识别组件类型与结构。</p>
+            </div>
+            <img class="step-img" src="assets/step8-auto-naming.png" alt="自动命名插件截图" loading="lazy">
           </div>
         </li>
 
-        
+        <!-- Step 10 -->
         <li class="step" id="step-10">
           <div class="step-circle" aria-hidden="true">10</div>
           <div class="step-body">
@@ -305,19 +1196,25 @@ git switch -c feat/activity-card</code></pre>
               <span class="step-title">Token 创建绑定</span>
               <span class="tag tag-optional">可选</span>
             </div>
-            <div class="prose"><p>把颜色、字体、间距和圆角对应到项目已有的样式变量。缺少映射时，在任务单里记录要确认的项。</p></div><img class="step-img" src="step-10.webp" width="1060" height="687" alt="活动卡片和颜色间距 Token 对照示意" tabindex="0" role="button" aria-haspopup="dialog" loading="lazy">
+            <div class="prose">
+              <p>如果项目使用了 Design Token，需要在 MasterGo 中创建并绑定 Token。可使用插件【Token 自动化】。</p>
+            </div>
+            <img class="step-img" src="assets/step10-token-binding.png" alt="Token 绑定截图" loading="lazy">
           </div>
         </li>
 
-        
+        <!-- Step 11 -->
         <li class="step" id="step-11">
           <div class="step-circle" aria-hidden="true">11</div>
           <div class="step-body">
             <div class="step-header">
-              <span class="step-title">导出图片资产</span>
-              <span class="tag tag-required" aria-label="必需步骤">必需</span>
+              <span class="step-title">图片替换为 PNG</span>
+              <span class="tag tag-required">必需</span>
             </div>
-            <div class="prose"><p>先复用项目已有的图标和图片。需要导出时标注大小与裁切，位图可用 PNG 或 WebP，矢量图标沿用项目资产格式。检查透明边缘和显示倍率。</p></div><img class="step-img" src="step-11.webp" width="1060" height="738" alt="活动卡片图片资产导出设置示意" tabindex="0" role="button" aria-haspopup="dialog" loading="lazy">
+            <div class="prose">
+              <p>将设计稿中的 icon 和装饰性图片图层转化为 PNG 格式。Skill 会自动切图并转化为链接。</p>
+            </div>
+            <img class="step-img" src="assets/step11-png-replace.png" alt="图片替换为 PNG 截图" loading="lazy">
           </div>
         </li>
 
@@ -326,24 +1223,28 @@ git switch -c feat/activity-card</code></pre>
       <!-- ══ PHASE 3 ══ -->
       <h2 class="section-title" id="phase-3">
         阶段三：Skill 应用与代码生成
-        <span class="section-chip">Web 开发</span>
+        <span class="section-chip">CatPaw</span>
       </h2>
 
       <ul class="step-list" aria-label="Skill 应用步骤">
 
-        
+        <!-- Step 12 -->
         <li class="step" id="step-12">
           <div class="step-circle" aria-hidden="true">12</div>
           <div class="step-body">
             <div class="step-header">
-              <span class="step-title">提交画板链接 + 截图</span>
-              <span class="tag tag-required" aria-label="必需步骤">必需</span>
+              <span class="step-title">粘贴容器画板 + 贴图</span>
+              <span class="tag tag-required">必需</span>
             </div>
-            <div class="prose"><p>把目标画板的链接和同版本的截图交给编程助手。补充画布尺寸、目标目录、已有组件和页面状态。设计链接的访问权限取决于画板分享设置，也可以单独提供截图。</p></div><img class="step-img" src="step-12a.webp" width="1060" height="663" alt="目标画板和截图范围示意" tabindex="0" role="button" aria-haspopup="dialog" loading="lazy"><img class="step-img" src="step-12b.webp" width="1060" height="870" alt="提交截图与实现范围的提示词示意" tabindex="0" role="button" aria-haspopup="dialog" loading="lazy">
+            <div class="prose">
+              <p>在 CatPaw 中粘贴 MasterGo 设计稿的<strong>容器链接</strong>与<strong>参考截图</strong>，触发 Skill 进行 DSL 解析。</p>
+            </div>
+            <img class="step-img" src="assets/step12-paste-link.png" alt="粘贴容器链接截图" loading="lazy">
+            <img class="step-img" src="assets/step12-paste-screenshot.png" alt="粘贴截图参考截图" loading="lazy">
           </div>
         </li>
 
-        
+        <!-- Step 13 -->
         <li class="step" id="step-13">
           <div class="step-circle" aria-hidden="true">13</div>
           <div class="step-body">
@@ -352,7 +1253,7 @@ git switch -c feat/activity-card</code></pre>
               <span class="tag tag-required">必需</span>
             </div>
             <div class="prose">
-              <p>开始生成前，确认这次要实现的范围。</p>
+              <p>Pipeline 暂停后会展示推断结果，选择要实现的页面范围：</p>
             </div>
             <div class="table-wrap" role="region" aria-label="生成范围选项">
               <table>
@@ -385,19 +1286,27 @@ git switch -c feat/activity-card</code></pre>
           </div>
         </li>
 
-        
+        <!-- Step 14 -->
         <li class="step" id="step-14">
           <div class="step-circle" aria-hidden="true">14</div>
           <div class="step-body">
             <div class="step-header">
               <span class="step-title">Skill 转码与自然语言指令调整</span>
-              <span class="tag tag-required" aria-label="必需步骤">必需</span>
+              <span class="tag tag-required">必需</span>
             </div>
-            <div class="prose"><p>调用 <code>$d2c-web-workflow</code> 或把任务单交给编程助手。确认实际改动文件，在浏览器打开实现结果，用相同尺寸和状态对照设计。发现偏差时说明元素、现状和预期，再复验。</p><p>下面演示从准备输入到验证按钮状态的过程。也可以<a href="practice.html">打开示例自行操作</a>。</p></div><video class="guide-video" controls playsinline preload="metadata" poster="demo-poster.webp" aria-label="设计截图到网页代码的操作演示"><source src="design-to-web-demo.mp4" type="video/mp4">当前浏览器无法播放内嵌视频。<a href="design-to-web-demo.mp4">打开 MP4 视频</a></video><p class="media-caption">视频演示 · 准备截图、确定范围、实现、复验</p><img class="step-img" src="step-14.webp" width="1060" height="685" alt="同尺寸预览与默认及已加入状态对照" tabindex="0" role="button" aria-haspopup="dialog" loading="lazy">
+            <div class="prose">
+              <p>触发代码生成后，Pipeline 自动执行拉取、切图、视觉对比（≥ 85 分 PASS）、TSX 生成等阶段。过程中可通过自然语言对结果进行修正微调。</p>
+              <p>代码生成结束后会提示完成，继续在对话框输入【扫码预览】启用 Skill，或通过 <code>/skill</code> 选择【picasso-liveload-verify】，出现测试二维码后使用测试包扫码即可查看生成设计稿。</p>
+            </div>
+            <video controls style="width:72%;max-width:560px;border-radius:0.625rem;border:1px solid var(--stroke-light);display:block;margin:1rem 0;background:var(--bg-page);" preload="metadata">
+              <source src="https://s3plus.meituan.net/mcopilot-pub/nocode_image/default/5%E6%9C%8827%E6%97%A5-x93o7b4tmr1xixr2zkw0s5th5lz017.mp4" type="video/mp4">
+            </video>
+            <p style="font-size:0.75rem;color:#999;margin-top:-0.5rem;margin-bottom:1rem;">视频演示</p>
+            <img class="step-img" src="assets/step14-qrcode.png" alt="代码生成测试二维码截图" loading="lazy">
           </div>
         </li>
 
-        
+        <!-- Step 15 -->
         <li class="step" id="step-15">
           <div class="step-circle" aria-hidden="true">15</div>
           <div class="step-body">
@@ -405,7 +1314,10 @@ git switch -c feat/activity-card</code></pre>
               <span class="step-title">交付代码</span>
               <span class="tag tag-done">完成</span>
             </div>
-            <div class="prose"><p>把变更提交到约定的分支。交接时附上代码和预览链接、参考截图、实际验证命令以及剩余差异。若涉及接口，记录字段和各状态的验收结果。</p><p><a href="d2c-web-kit.zip" download>下载任务单和可复用 Skill →</a></p></div>
+            <div class="prose">
+              <p>获取最终的 <code>.tsx</code> 文件进行接口数据对接。请仅调整文案与属性，避免破坏底层结构。</p>
+              <p style="color:#999;margin-top:4rem;">使用过程有问题可以联系 gaotian13、zhaiyang02 同学～</p>
+            </div>
           </div>
         </li>
 
@@ -416,10 +1328,6 @@ git switch -c feat/activity-card</code></pre>
   </main>
 
 </div>
-<dialog class="lb-overlay" aria-label="图片预览">
-  <button class="lb-close" type="button" aria-label="关闭预览">×</button>
-  <img alt="">
-</dialog>
-<div class="visually-hidden" id="copy-status" role="status"></div>
+</div></div>
 </body>
 </html>
