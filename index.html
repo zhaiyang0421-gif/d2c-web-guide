@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="用设计截图和通用前端项目练习设计转代码。包含四步手册、可运行示例和可下载的 Codex Skill。">
+  <title>设计转代码 · 对外使用手册</title>
+  <link rel="stylesheet" href="site.css">
+  <script src="site.js" defer></script>
+</head>
+<body>
+  <header class="shell site-head">
+    <a class="brand" href="#"><span aria-hidden="true">D2C</span>设计转代码</a>
+    <nav aria-label="页面导航">
+      <a href="#workflow">操作流程</a>
+      <a href="#example">练习示例</a>
+      <a href="#downloads">下载</a>
+    </nav>
+  </header>
+  <main class="shell">
+    <section class="hero" aria-labelledby="title">
+      <div>
+        <h1 id="title">从一张设计稿<br>到可运行页面</h1>
+        <p>带上设计截图，选定一个页面或组件，在你自己的 Web 项目里实现并验收。阅读手册、运行示例和下载工具包都可以直接在浏览器完成。</p>
+        <div class="actions">
+          <a class="button primary" href="#workflow">开始操作</a>
+          <a class="button secondary" href="d2c-web-kit.zip" download>下载 Skill 和模板</a>
+        </div>
+      </div>
+      <div class="hero-preview">
+        <div class="preview-head"><span>练习示例</span><a href="example.html">打开完整页面 ↗</a></div>
+        <iframe src="example.html" title="可运行的活动卡片示例"></iframe>
+      </div>
+    </section>
+
+    <section class="guide" id="workflow" aria-labelledby="workflow-title">
+      <div class="section-intro">
+        <h2 id="workflow-title">四步操作</h2>
+        <p>准备一张可分享的设计截图。手头有共享画板时，再附上选中画板的链接。</p>
+      </div>
+      <ol class="steps">
+        <li><h3>确定实现范围</h3><p>选定整页、区块或独立组件。记录目标文件、参考截图的画布尺寸、应覆盖的状态以及点击后的行为。已有项目时，写明可复用的组件和颜色、间距等变量。</p></li>
+        <li><h3>整理设计和素材</h3><p>用语义名称标注容器与内容，确认对齐、布局和尺寸。提供可用的图片和图标，标出浮层、裁切、长文案和小屏上的变化。</p></li>
+        <li><h3>实现目标界面</h3><p>用你已有的前端技术栈完成。新手可从 HTML、CSS 和 JavaScript 开始。有 AI 编程工具时，附上截图并复制下面的提示词，填好范围后再生成代码。</p></li>
+        <li><h3>在浏览器中验收</h3><p>用相同尺寸、主题和数据对照截图。检查间距、字重、图片和交互，缩窄视口验证文字换行，再按现有项目运行可用的检查和构建。</p></li>
+      </ol>
+    </section>
+
+    <section class="practice" id="example" aria-labelledby="example-title">
+      <div class="section-intro">
+        <h2 id="example-title">用示例练一次</h2>
+        <p>打开活动卡片并截一张图。尝试用下面的提示词重做同一块界面，再对照运行结果。示例中的状态可以用「加入清单」切换。</p>
+        <a href="example.html">打开活动卡片 ↗</a>
+      </div>
+      <div class="prompt">
+        <div class="prompt-head"><h3>实现提示词</h3><button id="copy-prompt" type="button" hidden>复制提示词</button></div>
+        <pre id="prompt-text" tabindex="0">根据参考截图，在当前项目中实现一张活动卡片。
+范围只包含卡片，复用项目已有的组件与样式变量。
+展示标题、简介和活动信息。按钮先显示「加入清单」，
+点击后变为「已加入」，再次点击可取消。
+检查正常宽度、小屏和键盘操作。完成后列出主要文件、
+实际运行的验证命令和结果，以及仍有差异的地方。</pre>
+        <p id="copy-status" role="status"></p>
+      </div>
+    </section>
+
+    <section class="downloads" id="downloads" aria-labelledby="download-title">
+      <div>
+        <h2 id="download-title">下载配套资料</h2>
+        <p>压缩包包含通用 Codex Skill、任务模板和可以离线运行的示例。想在 Codex 复用时，把 <code>.agents/skills/d2c-web-workflow</code> 放到自己的项目，再调用 <code>$d2c-web-workflow</code> 并附上截图。</p>
+      </div>
+      <a class="button primary" href="d2c-web-kit.zip" download>下载完整工具包</a>
+    </section>
+  </main>
+</body>
+</html>

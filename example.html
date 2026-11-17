@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>D2C 练习 · 活动卡片</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 16px; background: #e7eadd; color: #24352d; font: 1rem/1.55 Inter, "PingFang SC", system-ui, sans-serif; }
+    article { display: grid; gap: 14px; width: min(100%, 400px); padding: clamp(16px, 6vw, 25px); border: 1px solid #becab6; border-radius: 9px; background: #fdfcf5; }
+    h1 { font-size: clamp(1.2rem, 6vw, 1.55rem); letter-spacing: -.04em; line-height: 1.25; margin: 0; }
+    p { margin: 0; color: #526456; }
+    dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; border-top: 1px solid #d9ddd1; margin: 0; padding-top: 12px; }
+    dt { color: #526456; font-size: .82rem; }
+    dd { margin: 2px 0 0; font-weight: 650; overflow-wrap: anywhere; }
+    button { justify-self: start; border: 1px solid #294239; border-radius: 5px; background: #294239; color: white; min-height: 43px; padding: 5px 14px; font: inherit; font-weight: 650; cursor: pointer; }
+    button[aria-pressed="true"] { background: #fdfcf5; color: #294239; }
+    button:focus-visible { outline: 2px solid #396456; outline-offset: 4px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  </style>
+</head>
+<body>
+  <main>
+    <article aria-labelledby="card-title">
+      <h1 id="card-title">周末海报练习</h1>
+      <p>用两种颜色和一套字形完成一张主题海报。</p>
+      <dl>
+        <div><dt>活动时长</dt><dd>60 分钟</dd></div>
+        <div><dt>参与方式</dt><dd>线上练习</dd></div>
+      </dl>
+      <button type="button" aria-label="活动清单" aria-pressed="false">加入清单</button>
+      <output class="sr-only" aria-live="polite"></output>
+    </article>
+  </main>
+  <script>
+    const button = document.querySelector('button');
+    const message = document.querySelector('output');
+    button.addEventListener('click', () => {
+      const added = button.getAttribute('aria-pressed') === 'false';
+      button.setAttribute('aria-pressed', String(added));
+      button.textContent = added ? '已加入' : '加入清单';
+      message.textContent = added ? '已加入活动清单' : '已从活动清单移除';
+    });
+  </script>
+</body>
+</html>
