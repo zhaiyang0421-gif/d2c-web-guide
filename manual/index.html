@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>D2C 使用指南 · 对外版</title>
+  <meta name="description" content="15 步设计转 Web 代码使用指南。包含流程插图、可运行示例、公开操作视频和可下载 Skill。">
+  <link rel="stylesheet" href="fonts.css">
+  <link rel="stylesheet" href="guide.css">
+  <script src="guide.js" defer></script>
+</head>
+<body>
+<header class="header" role="banner">
+  <a class="header-logo" href="#" aria-label="D2C Guide 首页">
+    <svg class="logo-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="1" y="1" width="14" height="14" rx="3.5" fill="currentColor" opacity="0.9"/>
+      <rect x="9" y="9" width="14" height="14" rx="3.5" fill="currentColor" opacity="0.2"/>
+    </svg>
+    <span class="logo-text">
+      <span class="logo-text-bold">D2C</span><span class="logo-text-light">Guide</span>
+    </span>
+  </a>
+  <a class="header-btn" href="#step-2">
+    查看文档
+  </a>
+</header>
+
+
+<div class="layout">
+
+  
+  <aside class="sidebar" aria-label="页面导航">
+
+    <div class="sidebar-group">
+      <div class="sidebar-group-title" role="heading" aria-level="3">概述</div>
+      <a href="#intro" class="sidebar-link active" aria-current="location">简介</a>
+    </div>
+
+    <div class="sidebar-group">
+      <div class="sidebar-group-title" role="heading" aria-level="3">一、准备工作</div>
+      <a href="#step-1"  class="sidebar-link">准备开发工具</a>
+      <a href="#step-2"  class="sidebar-link">安装 D2C Skill</a>
+      <a href="#step-3"  class="sidebar-link">准备设计工具</a>
+      <a href="#step-4"  class="sidebar-link">生成 SSH Key</a>
+      <a href="#step-5"  class="sidebar-link">克隆代码仓库</a>
+      <a href="#step-6"  class="sidebar-link">安装项目依赖</a>
+    </div>
+
+    <div class="sidebar-group">
+      <div class="sidebar-group-title" role="heading" aria-level="3">二、设计稿准备</div>
+      <a href="#step-7"  class="sidebar-link">自动布局</a>
+      <a href="#step-8"  class="sidebar-link">图层规范检查</a>
+      <a href="#step-9"  class="sidebar-link">图层语义命名</a>
+      <a href="#step-10" class="sidebar-link">Token 创建绑定</a>
+      <a href="#step-11" class="sidebar-link">导出图片资产</a>
+    </div>
+
+    <div class="sidebar-group">
+      <div class="sidebar-group-title" role="heading" aria-level="3">三、Skill 应用</div>
+      <a href="#step-12" class="sidebar-link">提交画板链接 + 截图</a>
+      <a href="#step-13" class="sidebar-link">选择生成范围</a>
+      <a href="#step-14" class="sidebar-link">Skill 转码生成</a>
+      <a href="#step-15" class="sidebar-link">交付代码</a>
+    </div>
+
+
+  </aside>
+
+  
+  <main class="main" id="main-content" tabindex="-1">
+    <div class="content">
+
+      <!-- ── HERO ── -->
+      <section id="intro" aria-labelledby="page-title">
+        <p class="page-eyebrow" aria-hidden="true">Design to Code</p>
+        <h1 class="page-title" id="page-title">使用指南</h1>
+        <p class="page-subtitle">面向设计师与开发同学的设计转 Web 代码流程，从环境准备到代码交付，共 15 个步骤。</p>
+
+        <hr class="hero-rule" aria-hidden="true">
+
+        <!-- Pipeline -->
+        <div class="pipeline" aria-label="D2C 完整流水线">
+
+          <ol class="pipeline-steps" aria-label="流水线步骤">
+
+            <li class="pl-step">
+              <span class="pl-step-num">01</span>
+              <span class="pl-step-name">结构化设计稿</span>
+              <span class="pl-step-desc">AI 友好图层规范，自动布局 + 语义命名</span>
+            </li>
+
+            <li class="pl-step">
+              <span class="pl-step-num">02</span>
+              <span class="pl-step-name">结构解析 &amp; 素材</span>
+              <span class="pl-step-desc">用截图和画板定位布局，整理可复用资产</span>
+            </li>
+
+            <li class="pl-step">
+              <span class="pl-step-num">03</span>
+              <span class="pl-step-name">视觉验证</span>
+              <span class="pl-step-desc">用相同视口和状态对比设计与实现</span>
+            </li>
+
+            <li class="pl-step">
+              <span class="pl-step-num">04</span>
+              <span class="pl-step-name">Web 代码输出</span>
+              <span class="pl-step-desc">通过构建与交互验证，提交代码与记录</span>
+            </li>
+
+          </ol>
+
+          <!-- Stats strip -->
+          <dl class="pl-stats" aria-label="关键指标">
+            <div class="pl-stat">
+              <dt class="pl-stat-label">操作步骤</dt>
+              <dd class="pl-stat-value">15</dd>
+            </div>
+            <div class="pl-stat">
+              <dt class="pl-stat-label">工作阶段</dt>
+              <dd class="pl-stat-value">3</dd>
+            </div>
+            <div class="pl-stat">
+              <dt class="pl-stat-label">交付平台</dt>
+              <dd class="pl-stat-value">Web</dd>
+            </div>
+          </dl>
+
+        </div><!-- .pipeline -->
+      </section>
+
+      <!-- ══ PHASE 1 ══ -->
+      <h2 class="section-title" id="phase-1">
+        阶段一：准备工作
+        <span class="section-chip">环境搭建</span>
+      </h2>
+
+      <ul class="step-list" aria-label="准备工作步骤">
+
+        
+        <li class="step" id="step-1">
+          <div class="step-circle" aria-hidden="true">1</div>
+          <div class="step-body">
+            <div class="step-header">
+              <span class="step-title">准备开发工具</span>
+              <span class="tag tag-required" aria-label="必需步骤">必需</span>
+            </div>
+            <div class="prose"><p>用浏览器打开本指南。准备一个可以编辑文件的 Web 项目和你常用的编辑器。使用 AI 辅助时，在目标项目中打开 Codex 或其他支持项目文件的编程助手。</p><p><a href="practice.html">打开可运行的活动卡片示例 →</a></p></div>
+          </div>
+        </li>
+
+        
+        <li class="step" id="step-2">
+          <div class="step-circle" aria-hidden="true">2</div>
+          <div class="step-body">
+            <div class="step-header">
+              <span class="step-title">安装 D2C Skill</span>
+              <span class="tag tag-optional">可选</span>
+            </div>
+            <div class="prose"><p>下载通用工具包，把其中的 <code>.agents/skills/d2c-web-workflow/</code> 放到当前项目的 <code>.agents/skills/</code> 下。在项目里打开 Codex，输入 <code>$d2c-web-workflow</code> 并附上参考截图。</p><p><a href="d2c-web-kit.zip" download>下载 d2c-web-kit.zip →</a></p></div><div class="callout callout-info" role="note"><span class="callout-text">也可以把 <a href="https://github.com/zhaiyang0421-gif/d2c-web-guide" target="_blank" rel="noopener">GitHub 仓库地址</a>交给编程助手，请它下载 ZIP 并把 Skill 安装到当前项目。</span></div>
+          </div>
+        </li>
+
+        
+        <li class="step" id="step-3">
+          <div class="step-circle" aria-hidden="true">3</div>
+          <div class="step-body">
+            <div class="step-header">
+              <span class="step-title">准备设计工具</span>
+              <span class="tag tag-optional">可选</span>
+            </div>
+            <div class="prose"><p>使用你能打开的设计画板，选中要实现的容器并导出截图。示例使用活动卡片，标注了容器、标题、摘要和按钮。手上只有截图时，在任务单里补充尺寸和状态。</p></div><img class="step-img" src="step-03.webp" width="1060" height="640" alt="演示画板与截图导出面板" tabindex="0" role="button" aria-haspopup="dialog" loading="lazy">
+          </div>
+        </li>
+
+        
+        <li class="step" id="step-4">
+          <div class="step-circle" aria-hidden="true">4</div>
+          <div class="step-body">
+            <div class="step-header">
+              <span class="step-title">配置 Git SSH 公钥</span>
+              <span class="tag tag-optional">可选</span>
+            </div>
+            <div class="prose"><p>使用 SSH 克隆仓库时，先检查本机已有密钥。需要新建时，为示例命令指定一个未占用的文件名。把 <code>.pub</code> 文件的内容添加到代码托管平台，再使用平台提供的 SSH 地址。</p></div><div class="code-wrap">
+  <div class="code-topbar">
+    <span class="dot dot-r" aria-hidden="true"></span>
+    <span class="dot dot-y" aria-hidden="true"></span>
+    <span class="dot dot-g" aria-hidden="true"></span>
+    <button class="code-copy-btn" type="button" aria-label="复制代码">
+      <svg width="11" height="11" viewBox="0 0 14 14" fill="none" aria-hidden="true"><rect x="4" y="4" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M2 9V2.5A.5.5 0 0 1 2.5 2H9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      <span>复制</span>
+    </button>
+  </div>
+  <pre><code>ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_d2c -C &quot;you@example.com&quot;
+cat ~/.ssh/id_ed25519_d2c.pub</code></pre>
+</div><img class="step-img" src="step-04.webp" width="1060" height="680" alt="SSH 公钥设置示意图" tabindex="0" role="button" aria-haspopup="dialog" loading="lazy">
+          </div>
+        </li>
+
+        
+        <li class="step" id="step-5">
+          <div class="step-circle" aria-hidden="true">5</div>
+          <div class="step-body">
+            <div class="step-header">
+              <span class="step-title">克隆代码仓库</span>
+              <span class="tag tag-required" aria-label="必需步骤">必需</span>
+            </div>
+            <div class="prose"><p>已有工作区时，打开目标项目并检查当前分支。需要练习仓库时，可以克隆下面的公开示例。</p></div><div class="code-wrap">
+  <div class="code-topbar">
+    <span class="dot dot-r" aria-hidden="true"></span>
+    <span class="dot dot-y" aria-hidden="true"></span>
+    <span class="dot dot-g" aria-hidden="true"></span>
+    <button class="code-copy-btn" type="button" aria-label="复制代码">
+      <svg width="11" height="11" viewBox="0 0 14 14" fill="none" aria-hidden="true"><rect x="4" y="4" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M2 9V2.5A.5.5 0 0 1 2.5 2H9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      <span>复制</span>
+    </button>
+  </div>
+  <pre><code>git clone https://github.com/zhaiyang0421-gif/d2c-web-guide.git
+cd d2c-web-guide
+git switch -c feat/activity-card</code></pre>
+</div><img class="step-img" src="step-05a.webp" width="1060" height="465" alt="复制公开仓库 HTTPS 地址的演示" tabindex="0" role="button" aria-haspopup="dialog" loading="lazy"><div class="prose"><p>把地址交给编辑器或终端，拉取到本地后打开项目目录。</p></div><img class="step-img" src="step-05b.webp" width="1060" height="635" alt="在本地编辑器中打开示例项目" tabindex="0" role="button" aria-haspopup="dialog" loading="lazy"><div class="prose"><p>为本次修改建立工作分支。</p></div><img class="step-img" src="step-05c.webp" width="1060" height="635" alt="建立活动卡片工作分支的演示" tabindex="0" role="button" aria-haspopup="dialog" loading="lazy">
+          </div>
+        </li>
+
+        
+        <li class="step" id="step-6">
+          <div class="step-circle" aria-hidden="true">6</div>
+          <div class="step-body">
+            <div class="step-header">
+              <span class="step-title">安装项目依赖</span>
+              <span class="tag tag-optional">可选</span>
+            </div>
+            <div class="prose"><p>按目标项目的 README、锁文件和版本配置安装依赖，再运行一次基线预览。使用 pnpm 的项目可以从下面的命令开始。</p></div><div class="code-wrap">
+  <div class="code-topbar">
+    <span class="dot dot-r" aria-hidden="true"></span>
+    <span class="dot dot-y" aria-hidden="true"></span>
+    <span class="dot dot-g" aria-hidden="true"></span>
+    <button class="code-copy-btn" type="button" aria-label="复制代码">
+      <svg width="11" height="11" viewBox="0 0 14 14" fill="none" aria-hidden="true"><rect x="4" y="4" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M2 9V2.5A.5.5 0 0 1 2.5 2H9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      <span>复制</span>
+    </button>
+  </div>
+  <pre><code>pnpm install</code></pre>
+</div><div class="callout callout-warning" role="note"><span class="callout-emoji" aria-hidden="true">💡</span><span class="callout-text">本页的 <a href="practice.html">活动卡片示例</a> 使用原生 HTML、CSS 和 JavaScript，可以直接在浏览器中打开。</span></div>
+          </div>
+        </li>
+
+      </ul>
+
+      <!-- ══ PHASE 2 ══ -->
+      <h2 class="section-title" id="phase-2">
+        阶段二：设计稿准备
+        <span class="section-chip">设计工具</span>
+      </h2>
+
+      <ul class="step-list" aria-label="设计稿准备步骤">
+
+        
+        <li class="step" id="step-7">
+          <div class="step-circle" aria-hidden="true">7</div>
+          <div class="step-body">
+            <div class="step-header">
+              <span class="step-title">自动布局 (Auto Layout)</span>
+              <span class="tag tag-required">必需</span>
+            </div>
+            <div class="prose">
+              <p>先组织容器再填充内容，用自动布局表达行列、间距和对齐。</p>
+              <ul>
+                <li>容器使用自动布局，明确绝对定位图层（如悬浮按钮）</li>
+                <li>确保间距、对齐关系为<strong>整数</strong>，避免小数</li>
+                <li>层级结构遵循前端工程逻辑：容器嵌套 → 行列布局 → 内容填充</li>
+              </ul>
+            </div>
+          </div>
+        </li>
+
+        
+        <li class="step" id="step-8">
+          <div class="step-circle" aria-hidden="true">8</div>
+          <div class="step-body">
+            <div class="step-header">
+              <span class="step-title">图层规范检查</span>
+              <span class="tag tag-required" aria-label="必需步骤">必需</span>
+            </div>
+            <div class="prose"><p>核对隐藏元素、重复容器、缺失的自动布局和非预期的小数坐标。把实际参与裁切、遮罩或状态切换的图层标注清楚。</p></div><img class="step-img" src="step-08.webp" width="1060" height="680" alt="活动卡片的布局和冗余图层检查示意" tabindex="0" role="button" aria-haspopup="dialog" loading="lazy">
+          </div>
+        </li>
+
+        
+        <li class="step" id="step-9">
+          <div class="step-circle" aria-hidden="true">9</div>
+          <div class="step-body">
+            <div class="step-header">
+              <span class="step-title">图层语义命名</span>
+              <span class="tag tag-required" aria-label="必需步骤">必需</span>
+            </div>
+            <div class="prose"><p>按职责给容器、内容、资产和控件命名，例如 <code>ActivityCard</code>、<code>Title</code>、<code>JoinButton</code>。多个状态可以用变体字段区分。</p></div><img class="step-img" src="step-09.webp" width="1060" height="548" alt="活动卡片图层语义命名示意" tabindex="0" role="button" aria-haspopup="dialog" loading="lazy">
+          </div>
+        </li>
+
+        
+        <li class="step" id="step-10">
+          <div class="step-circle" aria-hidden="true">10</div>
+          <div class="step-body">
+            <div class="step-header">
+              <span class="step-title">Token 创建绑定</span>
+              <span class="tag tag-optional">可选</span>
+            </div>
+            <div class="prose"><p>把颜色、字体、间距和圆角对应到项目已有的样式变量。缺少映射时，在任务单里记录要确认的项。</p></div><img class="step-img" src="step-10.webp" width="1060" height="687" alt="活动卡片和颜色间距 Token 对照示意" tabindex="0" role="button" aria-haspopup="dialog" loading="lazy">
+          </div>
+        </li>
+
+        
+        <li class="step" id="step-11">
+          <div class="step-circle" aria-hidden="true">11</div>
+          <div class="step-body">
+            <div class="step-header">
+              <span class="step-title">导出图片资产</span>
+              <span class="tag tag-required" aria-label="必需步骤">必需</span>
+            </div>
+            <div class="prose"><p>先复用项目已有的图标和图片。需要导出时标注大小与裁切，位图可用 PNG 或 WebP，矢量图标沿用项目资产格式。检查透明边缘和显示倍率。</p></div><img class="step-img" src="step-11.webp" width="1060" height="738" alt="活动卡片图片资产导出设置示意" tabindex="0" role="button" aria-haspopup="dialog" loading="lazy">
+          </div>
+        </li>
+
+      </ul>
+
+      <!-- ══ PHASE 3 ══ -->
+      <h2 class="section-title" id="phase-3">
+        阶段三：Skill 应用与代码生成
+        <span class="section-chip">Web 开发</span>
+      </h2>
+
+      <ul class="step-list" aria-label="Skill 应用步骤">
+
+        
+        <li class="step" id="step-12">
+          <div class="step-circle" aria-hidden="true">12</div>
+          <div class="step-body">
+            <div class="step-header">
+              <span class="step-title">提交画板链接 + 截图</span>
+              <span class="tag tag-required" aria-label="必需步骤">必需</span>
+            </div>
+            <div class="prose"><p>把目标画板的链接和同版本的截图交给编程助手。补充画布尺寸、目标目录、已有组件和页面状态。设计链接的访问权限取决于画板分享设置，也可以单独提供截图。</p></div><img class="step-img" src="step-12a.webp" width="1060" height="663" alt="目标画板和截图范围示意" tabindex="0" role="button" aria-haspopup="dialog" loading="lazy"><img class="step-img" src="step-12b.webp" width="1060" height="870" alt="提交截图与实现范围的提示词示意" tabindex="0" role="button" aria-haspopup="dialog" loading="lazy">
+          </div>
+        </li>
+
+        
+        <li class="step" id="step-13">
+          <div class="step-circle" aria-hidden="true">13</div>
+          <div class="step-body">
+            <div class="step-header">
+              <span class="step-title">选择生成范围</span>
+              <span class="tag tag-required">必需</span>
+            </div>
+            <div class="prose">
+              <p>开始生成前，确认这次要实现的范围。</p>
+            </div>
+            <div class="table-wrap" role="region" aria-label="生成范围选项">
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">选项</th>
+                    <th scope="col">说明</th>
+                    <th scope="col">适用场景</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="badge badge-purple">A</span>&ensp;完整页面</td>
+                    <td>生成整个页面的代码</td>
+                    <td>新页面开发</td>
+                  </tr>
+                  <tr>
+                    <td><span class="badge badge-blue">B</span>&ensp;页面区块</td>
+                    <td>生成页面中某个区块的代码</td>
+                    <td>局部模块开发</td>
+                  </tr>
+                  <tr>
+                    <td><span class="badge badge-green">C</span>&ensp;独立组件</td>
+                    <td>生成独立组件的代码</td>
+                    <td>组件级开发</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </li>
+
+        
+        <li class="step" id="step-14">
+          <div class="step-circle" aria-hidden="true">14</div>
+          <div class="step-body">
+            <div class="step-header">
+              <span class="step-title">Skill 转码与自然语言指令调整</span>
+              <span class="tag tag-required" aria-label="必需步骤">必需</span>
+            </div>
+            <div class="prose"><p>调用 <code>$d2c-web-workflow</code> 或把任务单交给编程助手。确认实际改动文件，在浏览器打开实现结果，用相同尺寸和状态对照设计。发现偏差时说明元素、现状和预期，再复验。</p><p>下面演示从准备输入到验证按钮状态的过程。也可以<a href="practice.html">打开示例自行操作</a>。</p></div><video class="guide-video" controls playsinline preload="metadata" poster="demo-poster.webp" aria-label="设计截图到网页代码的操作演示"><source src="design-to-web-demo.mp4" type="video/mp4">当前浏览器无法播放内嵌视频。<a href="design-to-web-demo.mp4">打开 MP4 视频</a></video><p class="media-caption">视频演示 · 准备截图、确定范围、实现、复验</p><img class="step-img" src="step-14.webp" width="1060" height="685" alt="同尺寸预览与默认及已加入状态对照" tabindex="0" role="button" aria-haspopup="dialog" loading="lazy">
+          </div>
+        </li>
+
+        
+        <li class="step" id="step-15">
+          <div class="step-circle" aria-hidden="true">15</div>
+          <div class="step-body">
+            <div class="step-header">
+              <span class="step-title">交付代码</span>
+              <span class="tag tag-done">完成</span>
+            </div>
+            <div class="prose"><p>把变更提交到约定的分支。交接时附上代码和预览链接、参考截图、实际验证命令以及剩余差异。若涉及接口，记录字段和各状态的验收结果。</p><p><a href="d2c-web-kit.zip" download>下载任务单和可复用 Skill →</a></p></div>
+          </div>
+        </li>
+
+      </ul>
+
+
+    </div><!-- .content -->
+  </main>
+
+</div>
+<dialog class="lb-overlay" aria-label="图片预览">
+  <button class="lb-close" type="button" aria-label="关闭预览">×</button>
+  <img alt="">
+</dialog>
+<div class="visually-hidden" id="copy-status" role="status"></div>
+</body>
+</html>
